@@ -9,8 +9,8 @@ android {
         applicationId = "com.studiosmus.divinae"
         minSdk = 26
         targetSdk = 35
-        versionCode = 8
-        versionName = "0.3.1"
+        versionCode = 9
+        versionName = "0.3.2"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
