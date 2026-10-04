@@ -29,10 +29,18 @@ import androidx.compose.ui.unit.sp
 
 data class Terzina(val versi:String,val moderno:String,val nota:String)
 private val cantoI=listOf(
- Terzina("Nel mezzo del cammin di nostra vita\nmi ritrovai per una selva oscura,\nché la diritta via era smarrita.","A metà della vita mi ritrovo in un luogo oscuro: ho perso la strada giusta.","La selva è insieme luogo reale del racconto e immagine dello smarrimento di Dante."),
- Terzina("Ahi quanto a dir qual era è cosa dura\nesta selva selvaggia e aspra e forte\nche nel pensier rinova la paura!","È difficile perfino descrivere quanto quel bosco fosse terribile: ricordarlo fa tornare la paura.","Dante ci fa capire che quell'esperienza continua a scuoterlo anche mentre la racconta."),
- Terzina("Tant’è amara che poco è più morte;\nma per trattar del ben ch’i’ vi trovai,\ndirò de l’altre cose ch’i’ v’ho scorte.","Fu un'esperienza quasi peggiore della morte; ma racconterò il bene che vi trovai e ciò che vidi.","La promessa è già qui: dentro lo smarrimento Dante troverà qualcosa capace di salvarlo."),
- Terzina("Io non so ben ridir com’i’ v’intrai,\ntant’era pien di sonno a quel punto\nche la verace via abbandonai.","Non so spiegare bene come ci entrai: ero come addormentato quando abbandonai la strada vera.","Il sonno suggerisce inconsapevolezza: ci si può perdere prima ancora di accorgersi di essersi perduti.")
+ Terzina("Nel mezzo del cammin di nostra vita
+     mi ritrovai per una selva oscura,
+     ché la diritta via era smarrita.","A metà della vita mi ritrovo in un luogo oscuro: ho perso la strada giusta.","La selva è insieme luogo reale del racconto e immagine dello smarrimento di Dante."),
+ Terzina("Ahi quanto a dir qual era è cosa dura
+     esta selva selvaggia e aspra e forte
+     che nel pensier rinova la paura!","È difficile perfino descrivere quanto quel bosco fosse terribile: ricordarlo fa tornare la paura.","Dante ci fa capire che quell'esperienza continua a scuoterlo anche mentre la racconta."),
+ Terzina("Tant’è amara che poco è più morte;
+     ma per trattar del ben ch’i’ vi trovai,
+     dirò de l’altre cose ch’i’ v’ho scorte.","Fu un'esperienza quasi peggiore della morte; ma racconterò il bene che vi trovai e ciò che vidi.","La promessa è già qui: dentro lo smarrimento Dante troverà qualcosa capace di salvarlo."),
+ Terzina("Io non so ben ridir com’i’ v’intrai,
+     tant’era pien di sonno a quel punto
+     che la verace via abbandonai.","Non so spiegare bene come ci entrai: ero come addormentato quando abbandonai la strada vera.","Il sonno suggerisce inconsapevolezza: ci si può perdere prima ancora di accorgersi di essersi perduti.")
 )
 
 class MainActivity:ComponentActivity(){
@@ -50,7 +58,10 @@ class MainActivity:ComponentActivity(){
     Text("⋮",color=Color(0xFFBDAA87),fontSize=24.sp)
    }
    Surface(Modifier.padding(horizontal=8.dp).fillMaxWidth().weight(1f).shadow(28.dp),color=paper,shape=RoundedCornerShape(12.dp)){
-    Column(Modifier.fillMaxSize().background(Color(0xFFE8C98E)).verticalScroll(rememberScrollState()).padding(horizontal=24.dp,vertical=26.dp)){\n     Text("INFERNO",Modifier.fillMaxWidth(),color=rubric,fontFamily=FontFamily.Serif,fontSize=34.sp,letterSpacing=3.sp)\n     Text("CANTO I",Modifier.fillMaxWidth(),color=ink,fontFamily=FontFamily.Serif,fontSize=18.sp,letterSpacing=2.sp)\n     Spacer(Modifier.height(16.dp))
+    Column(Modifier.fillMaxSize().background(Color(0xFFE8C98E)).verticalScroll(rememberScrollState()).padding(horizontal=24.dp,vertical=26.dp)){
+     Text("INFERNO",Modifier.fillMaxWidth(),color=rubric,fontFamily=FontFamily.Serif,fontSize=34.sp,letterSpacing=3.sp)
+     Text("CANTO I",Modifier.fillMaxWidth(),color=ink,fontFamily=FontFamily.Serif,fontSize=18.sp,letterSpacing=2.sp)
+     Spacer(Modifier.height(16.dp))
      Text("❦  LO SMARRIMENTO  ❦",Modifier.fillMaxWidth(),textAlign=TextAlign.Center,color=Color(0xFF76502C),fontSize=10.sp,letterSpacing=2.4.sp)
      Spacer(Modifier.height(9.dp));Text("❦",Modifier.fillMaxWidth(),textAlign=TextAlign.Center,color=Color(0xFF98713D),fontSize=19.sp);Spacer(Modifier.height(24.dp))
      cantoI.forEachIndexed{i,t->
