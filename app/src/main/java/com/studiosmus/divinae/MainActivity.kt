@@ -93,3 +93,23 @@ class MainActivity:ComponentActivity(){
   }
  }
 }
+
+@Composable private fun EdgeTabs(){
+ var open by rememberSaveable{mutableStateOf<String?>(null)}
+ val items=listOf("♫" to "Musica","🔥" to "Atmosfera","☰" to "Indice")
+ Column(Modifier.fillMaxHeight().padding(top=120.dp,end=3.dp),verticalArrangement=Arrangement.spacedBy(10.dp),horizontalAlignment=Alignment.End){
+  items.forEach{(icon,label)->
+   Row(verticalAlignment=Alignment.CenterVertically){
+    AnimatedVisibility(open==label){
+     androidx.compose.material3.Surface(color=Color(0xFF3A2117).copy(.96f),shape=RoundedCornerShape(10.dp)){
+      Column(Modifier.width(170.dp).padding(14.dp)){
+       Text(label,fontFamily=Explain,fontSize=18.sp,color=Color(0xFFF0DDAF))
+       Text(when(label){"Musica"->"▶  Musica medievale\nVolume  ━━━━━";"Atmosfera"->"🔥 Camino   ON\n🌲 Selva    ON\nVolume  ━━━━━";else->"INFERNO\nCanto I · La selva oscura\n\nPURGATORIO\nPARADISO"},fontFamily=Explain,fontSize=14.sp,lineHeight=21.sp,color=Color(0xFFE2C88E),modifier=Modifier.padding(top=8.dp))
+      }
+     }
+    }
+    Text(icon,Modifier.clip(RoundedCornerShape(topStart=8.dp,bottomStart=8.dp)).background(Color(0xFF3A2117).copy(.94f)).clickable{open=if(open==label)null else label}.padding(horizontal=10.dp,vertical=13.dp),fontSize=18.sp,color=Gold)
+   }
+  }
+ }
+}
