@@ -125,7 +125,7 @@ class MainActivity:ComponentActivity(){
 
 @Composable private fun Explanation(index:Int,t:Terzina,onClose:()->Unit){
  Column(
-  Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal=28.dp,bottom=18.dp)
+  Modifier.fillMaxWidth().navigationBarsPadding().padding(start=28.dp,end=28.dp,bottom=18.dp)
    .clip(RoundedCornerShape(12.dp)).background(Color(0xFFF0DDAF).copy(.97f))
    .clickable{onClose()}.padding(horizontal=20.dp,vertical=14.dp)
  ){
