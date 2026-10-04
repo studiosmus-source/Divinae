@@ -8,7 +8,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -49,75 +47,93 @@ dirò de l’altre cose ch’i’ v’ho scorte.""","Fu un'esperienza quasi pegg
 tant’era pien di sonno a quel punto
 che la verace via abbandonai.""","Non so spiegare come ci entrai: ero come addormentato quando abbandonai la via vera.","Il sonno indica inconsapevolezza: Dante si accorge dello smarrimento quando è già dentro la selva.")
 )
-private val Dante=FontFamily(Font(R.font.im_fell_english))
-private val Explain=FontFamily(Font(R.font.eb_garamond))
-private val Ink=Color(0xFF2B190F); private val Red=Color(0xFF7D1F18); private val Gold=Color(0xFFC59A45)
+
+private val Book = FontFamily(
+    Font(R.font.im_fell_english, FontWeight.Normal)
+)
+private val Modern = FontFamily(Font(R.font.eb_garamond, FontWeight.Normal))
+private val Ink=Color(0xFF2B190F)
+private val Red=Color(0xFF7D1F18)
+private val Gold=Color(0xFFC59A45)
 
 class MainActivity:ComponentActivity(){
  override fun onCreate(savedInstanceState:Bundle?){
   enableEdgeToEdge(SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),SystemBarStyle.dark(android.graphics.Color.TRANSPARENT))
-  super.onCreate(savedInstanceState); setContent{MaterialTheme{Divinae()}}
+  super.onCreate(savedInstanceState)
+  setContent{MaterialTheme{Divinae()}}
  }
 }
 
 @Composable fun Divinae(){
  var page by rememberSaveable{mutableIntStateOf(0)}
  var selected by rememberSaveable{mutableStateOf<Int?>(null)}
+ var drawer by rememberSaveable{mutableStateOf<String?>(null)}
  Box(Modifier.fillMaxSize().background(Color(0xFF100806))){
-  Image(painterResource(R.drawable.manuscript_frame),null,Modifier.fillMaxSize(),contentScale=ContentScale.FillBounds)
-  Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(start=68.dp,end=64.dp,top=52.dp,bottom=126.dp),horizontalAlignment=Alignment.CenterHorizontally){
-   Text("INFERNO",fontFamily=Explain,fontWeight=FontWeight.Bold,fontSize=13.sp,letterSpacing=3.sp,color=Red)
-   Text("CANTO I",fontFamily=Explain,fontWeight=FontWeight.Bold,fontSize=22.sp,color=Ink)
+  androidx.compose.foundation.Image(
+   painterResource(R.drawable.manuscript_frame),null,
+   Modifier.fillMaxSize(),contentScale=ContentScale.FillBounds
+  )
+  // Il testo resta nativo: l'illustrazione è solo la materia fisica del manoscritto.
+  Column(
+   Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()
+    .padding(start=68.dp,end=78.dp,top=52.dp,bottom=128.dp),
+   horizontalAlignment=Alignment.CenterHorizontally
+  ){
+   Text("INFERNO",fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=13.sp,letterSpacing=3.sp,color=Red)
+   Text("CANTO I",fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=22.sp,color=Ink)
    Box(Modifier.padding(vertical=7.dp).width(84.dp).height(1.dp).background(Gold.copy(.7f)))
    Column(Modifier.weight(1f).verticalScroll(rememberScrollState())){
     val range=if(page==0) 0..1 else 2..3
-    range.forEach{i-> val t=cantoI[i]; val active=selected==i
-     Column(Modifier.fillMaxWidth().padding(vertical=5.dp).clip(RoundedCornerShape(4.dp)).background(if(active) Gold.copy(.20f) else Color.Transparent).clickable{selected=i}.padding(5.dp)){
-      Text("${i*3+1}",fontFamily=Explain,fontSize=10.sp,color=Red.copy(.75f))
-      Text(t.versi,fontFamily=Dante,fontSize=18.sp,lineHeight=24.sp,color=Ink)
+    range.forEach{ i ->
+     val t=cantoI[i]
+     val active=selected==i
+     Column(
+      Modifier.fillMaxWidth().padding(vertical=5.dp)
+       .clip(RoundedCornerShape(4.dp))
+       .background(if(active) Gold.copy(alpha=.19f) else Color.Transparent)
+       .clickable{selected=i}.padding(horizontal=5.dp,vertical=5.dp)
+     ){
+      Text("${i*3+1}",fontFamily=Book,fontSize=10.sp,color=Red.copy(.75f))
+      Text(t.versi,fontFamily=Book,fontSize=17.sp,lineHeight=23.sp,color=Ink)
      }
     }
    }
-   Text("Tocca una terzina per comprenderla",fontFamily=Explain,fontStyle=FontStyle.Italic,fontSize=11.sp,color=Ink.copy(.68f))
+   Text("Tocca una terzina per comprenderla",fontFamily=Book,fontStyle=FontStyle.Italic,fontSize=11.sp,color=Ink.copy(.68f))
    Row(Modifier.fillMaxWidth().padding(top=7.dp),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically){
-    Text("‹",Modifier.clickable(enabled=page>0){page--;selected=null}.padding(8.dp),fontFamily=Dante,fontSize=30.sp,color=if(page>0) Red else Ink.copy(.2f))
-    Text("${page+1} / 2",fontFamily=Explain,fontSize=12.sp,color=Ink)
-    Text("›",Modifier.clickable(enabled=page<1){page++;selected=null}.padding(8.dp),fontFamily=Dante,fontSize=30.sp,color=if(page<1) Red else Ink.copy(.2f))
+    Text("‹",Modifier.clickable(enabled=page>0){page--;selected=null}.padding(8.dp),fontFamily=Book,fontSize=28.sp,color=if(page>0) Red else Ink.copy(.2f))
+    Text("${page+1} / 2",fontFamily=Book,fontSize=12.sp,color=Ink)
+    Text("›",Modifier.clickable(enabled=page<1){page++;selected=null}.padding(8.dp),fontFamily=Book,fontSize=28.sp,color=if(page<1) Red else Ink.copy(.2f))
    }
   }
-  EdgeTabs(Modifier.align(Alignment.CenterEnd))
-  AnimatedVisibility(selected!=null,enter=fadeIn(),exit=fadeOut(),modifier=Modifier.align(Alignment.BottomCenter)){selected?.let{Explanation(it,cantoI[it]){selected=null}}}
- }
-}
-
-@Composable private fun EdgeTabs(modifier:Modifier=Modifier){
- var open by rememberSaveable{mutableStateOf<String?>(null)}
- val items=listOf("♫" to "Musica","🔥" to "Atmosfera","☰" to "Indice")
- Column(modifier.padding(end=2.dp),verticalArrangement=Arrangement.spacedBy(10.dp),horizontalAlignment=Alignment.End){
-  items.forEach{(icon,label)->
-   Row(verticalAlignment=Alignment.CenterVertically){
-    AnimatedVisibility(open==label){
-     Surface(color=Color(0xFF3A2117).copy(.97f),shape=RoundedCornerShape(10.dp)){
-      Column(Modifier.width(174.dp).padding(14.dp)){
-       Text(label,fontFamily=Explain,fontSize=18.sp,color=Color(0xFFF0DDAF))
-       val body=when(label){"Musica"->"▶  Musica medievale\nVolume   ━━━━━";"Atmosfera"->"🔥 Camino   ON\n🌲 Selva    ON\nVolume   ━━━━━";else->"INFERNO\nCanto I · La selva oscura\n\nPURGATORIO\nPARADISO"}
-       Text(body,fontFamily=Explain,fontSize=14.sp,lineHeight=21.sp,color=Color(0xFFE2C88E),modifier=Modifier.padding(top=8.dp))
-      }
-     }
-    }
-    Text(icon,Modifier.clip(RoundedCornerShape(topStart=8.dp,bottomStart=8.dp)).background(Color(0xFF3A2117).copy(.95f)).clickable{open=if(open==label)null else label}.padding(horizontal=9.dp,vertical=12.dp),fontSize=17.sp,color=Gold)
+  Column(Modifier.align(Alignment.CenterEnd).padding(end=3.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
+   listOf("♫" to "Musica","🔥" to "Atmosfera","☰" to "Indice").forEach{(icon,name)->
+    Text(icon,Modifier.clip(RoundedCornerShape(topStart=10.dp,bottomStart=10.dp)).background(Color(0xFF4A2417).copy(.92f)).clickable{drawer=if(drawer==name)null else name}.padding(horizontal=10.dp,vertical=12.dp),fontSize=20.sp,color=Gold)
    }
+  }
+  AnimatedVisibility(drawer!=null,enter=fadeIn(),exit=fadeOut(),modifier=Modifier.align(Alignment.CenterEnd)){
+   Column(Modifier.padding(end=38.dp).width(190.dp).clip(RoundedCornerShape(12.dp)).background(Color(0xFFF0DDAF).copy(.97f)).clickable{drawer=null}.padding(16.dp)){
+    Text(drawer?:"",fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=18.sp,color=Red)
+    Spacer(Modifier.height(8.dp))
+    Text(when(drawer){"Musica"->"♫  Riproduci / Pausa\nVolume  ━━━━━";"Atmosfera"->"🔥  Camino\n🌲  Bosco\nVolume  ━━━━━";else->"INFERNO\n• Canto I — La selva oscura\n\nPURGATORIO\nPARADISO"},fontFamily=Modern,fontSize=14.sp,lineHeight=21.sp,color=Ink)
+   }
+  }
+  AnimatedVisibility(selected!=null,enter=fadeIn(),exit=fadeOut(),modifier=Modifier.align(Alignment.BottomCenter)){
+   selected?.let{Explanation(it,cantoI[it]){selected=null}}
   }
  }
 }
 
 @Composable private fun Explanation(index:Int,t:Terzina,onClose:()->Unit){
- Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(start=28.dp,end=28.dp,bottom=18.dp).clip(RoundedCornerShape(12.dp)).background(Color(0xFFF0DDAF).copy(.98f)).clickable{onClose()}.padding(horizontal=20.dp,vertical=14.dp)){
-  Text("VERSI ${index*3+1}–${index*3+3}",fontFamily=Explain,fontWeight=FontWeight.Bold,fontSize=10.sp,letterSpacing=1.5.sp,color=Red)
-  Text("In parole di oggi",fontFamily=Explain,fontWeight=FontWeight.Bold,fontSize=16.sp,color=Ink,modifier=Modifier.padding(top=6.dp))
-  Text(t.moderno,fontFamily=Explain,fontSize=15.sp,lineHeight=20.sp,color=Ink)
-  Text("Perché conta",fontFamily=Explain,fontWeight=FontWeight.Bold,fontSize=14.sp,color=Red,modifier=Modifier.padding(top=8.dp))
-  Text(t.nota,fontFamily=Explain,fontSize=13.sp,lineHeight=18.sp,color=Ink.copy(.88f))
-  Text("tocca per chiudere",fontFamily=Explain,fontStyle=FontStyle.Italic,fontSize=10.sp,color=Ink.copy(.55f),textAlign=TextAlign.End,modifier=Modifier.fillMaxWidth().padding(top=5.dp))
+ Column(
+  Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal=28.dp,bottom=18.dp)
+   .clip(RoundedCornerShape(12.dp)).background(Color(0xFFF0DDAF).copy(.97f))
+   .clickable{onClose()}.padding(horizontal=20.dp,vertical=14.dp)
+ ){
+  Text("VERSI ${index*3+1}–${index*3+3}",fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=10.sp,letterSpacing=1.5.sp,color=Red)
+  Text("In parole di oggi",fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=16.sp,color=Ink,modifier=Modifier.padding(top=6.dp))
+  Text(t.moderno,fontFamily=Modern,fontSize=15.sp,lineHeight=20.sp,color=Ink)
+  Text("Perché conta",fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=14.sp,color=Red,modifier=Modifier.padding(top=8.dp))
+  Text(t.nota,fontFamily=Modern,fontSize=13.sp,lineHeight=18.sp,color=Ink.copy(.88f))
+  Text("tocca per chiudere",fontFamily=Book,fontStyle=FontStyle.Italic,fontSize=10.sp,color=Ink.copy(.55f),textAlign=TextAlign.End,modifier=Modifier.fillMaxWidth().padding(top=5.dp))
  }
 }
