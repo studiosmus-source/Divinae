@@ -112,7 +112,7 @@ class MainActivity:ComponentActivity(){
 }
 
 @Composable private fun Explanation(index:Int,t:Terzina,onClose:()->Unit){
- Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal=28.dp,bottom=18.dp).clip(RoundedCornerShape(12.dp)).background(Color(0xFFF0DDAF).copy(.98f)).clickable{onClose()}.padding(horizontal=20.dp,vertical=14.dp)){
+ Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(start=28.dp,end=28.dp,bottom=18.dp).clip(RoundedCornerShape(12.dp)).background(Color(0xFFF0DDAF).copy(.98f)).clickable{onClose()}.padding(horizontal=20.dp,vertical=14.dp)){
   Text("VERSI ${index*3+1}–${index*3+3}",fontFamily=Explain,fontWeight=FontWeight.Bold,fontSize=10.sp,letterSpacing=1.5.sp,color=Red)
   Text("In parole di oggi",fontFamily=Explain,fontWeight=FontWeight.Bold,fontSize=16.sp,color=Ink,modifier=Modifier.padding(top=6.dp))
   Text(t.moderno,fontFamily=Explain,fontSize=15.sp,lineHeight=20.sp,color=Ink)
