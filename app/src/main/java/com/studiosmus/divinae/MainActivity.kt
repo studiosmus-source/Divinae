@@ -111,13 +111,13 @@ class MainActivity:ComponentActivity(){
    }
   }
   AnimatedVisibility(drawer!=null,enter=fadeIn(),exit=fadeOut(),modifier=Modifier.align(Alignment.CenterEnd)){
-   Column(Modifier.padding(end=38.dp).width(190.dp).clip(RoundedCornerShape(12.dp)).background(Color(0xFFF0DDAF).copy(.97f)).clickable{drawer=null}.padding(16.dp)){
+   Column(Modifier.padding(end=38.dp).width(190.dp).background(Color(0xFFF3E8CF)).clickable{drawer=null}.padding(16.dp)){
     Text(drawer?:"",fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=18.sp,color=Red)
     Spacer(Modifier.height(8.dp))
     Text(when(drawer){"Musica"->"♫  Riproduci / Pausa\nVolume  ━━━━━";"Atmosfera"->"🔥  Camino\n🌲  Bosco\nVolume  ━━━━━";else->"INFERNO\n• Canto I — La selva oscura\n\nPURGATORIO\nPARADISO"},fontFamily=Modern,fontSize=14.sp,lineHeight=21.sp,color=Ink)
    }
   }
-  AnimatedVisibility(selected!=null,enter=fadeIn(),exit=fadeOut(),modifier=Modifier.align(Alignment.BottomCenter)){
+  AnimatedVisibility(selected!=null,enter=fadeIn(),exit=fadeOut(),modifier=Modifier.fillMaxSize()){
    selected?.let{Explanation(it,cantoI[it]){selected=null}}
   }
  }
@@ -125,7 +125,7 @@ class MainActivity:ComponentActivity(){
 
 @Composable private fun Explanation(index:Int,t:Terzina,onClose:()->Unit){
  Column(
-  Modifier.fillMaxWidth().navigationBarsPadding().padding(start=28.dp,end=28.dp,bottom=18.dp)
+  Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(horizontal=28.dp,vertical=42.dp)
    .clip(RoundedCornerShape(12.dp)).background(Color(0xFFF0DDAF).copy(.97f))
    .clickable{onClose()}.padding(horizontal=20.dp,vertical=14.dp)
  ){
