@@ -1,6 +1,8 @@
 package com.studiosmus.divinae
 
 import android.os.Bundle
+import android.media.MediaPlayer
+import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -16,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.Slider
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -31,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 
 data class Terzina(val versi:String,val moderno:String,val nota:String)
 private val cantoI=listOf(
@@ -68,6 +72,23 @@ class MainActivity:ComponentActivity(){
  var page by rememberSaveable{mutableIntStateOf(0)}
  var selected by rememberSaveable{mutableStateOf<Int?>(null)}
  var drawer by rememberSaveable{mutableStateOf<String?>(null)}
+ val context=LocalContext.current
+ var musicOn by rememberSaveable{mutableStateOf(false)}
+ var fireOn by rememberSaveable{mutableStateOf(false)}
+ var musicVolume by rememberSaveable{mutableFloatStateOf(.55f)}
+ var fireVolume by rememberSaveable{mutableFloatStateOf(.45f)}
+ val musicPlayer=remember{MediaPlayer()}
+ val firePlayer=remember{MediaPlayer()}
+ DisposableEffect(Unit){
+  fun prepare(p:MediaPlayer,url:String){
+   runCatching{p.setDataSource(context,Uri.parse(url));p.isLooping=true;p.prepareAsync()}
+  }
+  prepare(musicPlayer,DivinaeReaderEngine.darkWood.sourceUrl)
+  prepare(firePlayer,DivinaeReaderEngine.fireplaceUrl)
+  onDispose{runCatching{musicPlayer.release()};runCatching{firePlayer.release()}}
+ }
+ LaunchedEffect(musicOn,musicVolume){musicPlayer.setVolume(musicVolume,musicVolume);if(musicOn){runCatching{musicPlayer.start()}}else{runCatching{musicPlayer.pause()}}}
+ LaunchedEffect(fireOn,fireVolume){firePlayer.setVolume(fireVolume,fireVolume);if(fireOn){runCatching{firePlayer.start()}}else{runCatching{firePlayer.pause()}}}
  Box(Modifier.fillMaxSize().background(Color(0xFF100806))){
   androidx.compose.foundation.Image(
    painterResource(R.drawable.manuscript_frame),null,
@@ -76,7 +97,7 @@ class MainActivity:ComponentActivity(){
   // Il testo resta nativo: l'illustrazione è solo la materia fisica del manoscritto.
   Column(
    Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()
-    .padding(start=68.dp,end=78.dp,top=52.dp,bottom=128.dp),
+    .padding(start=DivinaeReaderEngine.cantoOne.safeZone.start,end=DivinaeReaderEngine.cantoOne.safeZone.end,top=DivinaeReaderEngine.cantoOne.safeZone.top,bottom=DivinaeReaderEngine.cantoOne.safeZone.bottom),
    horizontalAlignment=Alignment.CenterHorizontally
   ){
    Text("INFERNO",fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=13.sp,letterSpacing=3.sp,color=Red)
@@ -94,7 +115,7 @@ class MainActivity:ComponentActivity(){
        .clickable{selected=i}.padding(horizontal=5.dp,vertical=5.dp)
      ){
       Text("${i*3+1}",fontFamily=Book,fontSize=10.sp,color=Red.copy(.75f))
-      Text(t.versi,fontFamily=Book,fontSize=17.sp,lineHeight=23.sp,color=Ink)
+      Text(t.versi,fontFamily=Book,fontSize=14.sp,lineHeight=19.sp,color=Ink)
      }
     }
    }
@@ -114,7 +135,19 @@ class MainActivity:ComponentActivity(){
    Column(Modifier.padding(end=38.dp).width(190.dp).background(Color(0xFFF3E8CF)).clickable{drawer=null}.padding(16.dp)){
     Text(drawer?:"",fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=18.sp,color=Red)
     Spacer(Modifier.height(8.dp))
-    Text(when(drawer){"Musica"->"♫  Riproduci / Pausa\nVolume  ━━━━━";"Atmosfera"->"🔥  Camino\n🌲  Bosco\nVolume  ━━━━━";else->"INFERNO\n• Canto I — La selva oscura\n\nPURGATORIO\nPARADISO"},fontFamily=Modern,fontSize=14.sp,lineHeight=21.sp,color=Ink)
+    when(drawer){
+     "Musica"->{
+      Text(DivinaeReaderEngine.darkWood.title,fontFamily=Modern,fontSize=13.sp,lineHeight=18.sp,color=Ink)
+      Text(if(musicOn)"❚❚  Pausa" else "▶  Riproduci",Modifier.fillMaxWidth().clickable{musicOn=!musicOn}.padding(vertical=10.dp),fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=15.sp,color=Red)
+      Slider(value=musicVolume,onValueChange={musicVolume=it})
+     }
+     "Atmosfera"->{
+      Text("Camino",fontFamily=Modern,fontSize=14.sp,color=Ink)
+      Text(if(fireOn)"🔥  Spegni" else "🔥  Accendi",Modifier.fillMaxWidth().clickable{fireOn=!fireOn}.padding(vertical=10.dp),fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=15.sp,color=Red)
+      Slider(value=fireVolume,onValueChange={fireVolume=it})
+     }
+     else->Text("INFERNO\n• Canto I — La selva oscura\n\nPURGATORIO\nPARADISO",fontFamily=Modern,fontSize=14.sp,lineHeight=21.sp,color=Ink)
+    }
    }
   }
   AnimatedVisibility(selected!=null,enter=fadeIn(),exit=fadeOut(),modifier=Modifier.fillMaxSize()){
