@@ -41,7 +41,7 @@ class MainActivity:ComponentActivity(){
 
 @Composable fun Divinae(){
  var selected by remember{mutableStateOf<Terzina?>(null)}
- val night=Color(0xFF100C09);val paper=Color(0xFFE7D5AE);val ink=Color(0xFF251A14);val rubric=Color(0xFF792A22)
+ val night=Color(0xFF120A05);val paper=Color(0xFFE8C98E);val ink=Color(0xFF24140B);val rubric=Color(0xFF8A2619)
  Box(Modifier.fillMaxSize().background(night)){
   Column(Modifier.fillMaxSize()){
    Row(Modifier.fillMaxWidth().height(54.dp).padding(horizontal=18.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.SpaceBetween){
@@ -49,14 +49,14 @@ class MainActivity:ComponentActivity(){
     Text("DIVINAE  ·  INFERNO I",color=Color(0xFFBDAA87),fontSize=10.sp,letterSpacing=2.sp)
     Text("⋮",color=Color(0xFFBDAA87),fontSize=24.sp)
    }
-   Surface(Modifier.padding(horizontal=14.dp).fillMaxWidth().weight(1f).shadow(22.dp),color=paper,shape=RoundedCornerShape(topStart=2.dp,topEnd=9.dp,bottomEnd=9.dp,bottomStart=2.dp)){
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal=28.dp,vertical=34.dp)){
-     Text("LO SMARRIMENTO",Modifier.fillMaxWidth(),textAlign=TextAlign.Center,color=Color(0xFF765C3D),fontSize=10.sp,letterSpacing=2.6.sp)
+   Surface(Modifier.padding(horizontal=8.dp).fillMaxWidth().weight(1f).shadow(28.dp),color=paper,shape=RoundedCornerShape(12.dp)){
+    Column(Modifier.fillMaxSize().background(Color(0xFFE8C98E)).verticalScroll(rememberScrollState()).padding(horizontal=24.dp,vertical=26.dp)){\n     Text("INFERNO",Modifier.fillMaxWidth(),color=rubric,fontFamily=FontFamily.Serif,fontSize=34.sp,letterSpacing=3.sp)\n     Text("CANTO I",Modifier.fillMaxWidth(),color=ink,fontFamily=FontFamily.Serif,fontSize=18.sp,letterSpacing=2.sp)\n     Spacer(Modifier.height(16.dp))
+     Text("❦  LO SMARRIMENTO  ❦",Modifier.fillMaxWidth(),textAlign=TextAlign.Center,color=Color(0xFF76502C),fontSize=10.sp,letterSpacing=2.4.sp)
      Spacer(Modifier.height(9.dp));Text("❦",Modifier.fillMaxWidth(),textAlign=TextAlign.Center,color=Color(0xFF98713D),fontSize=19.sp);Spacer(Modifier.height(24.dp))
      cantoI.forEachIndexed{i,t->
       Row(Modifier.fillMaxWidth().clickable{selected=t}.padding(vertical=8.dp)){
-       if(i==0) Text("N",color=rubric,fontFamily=FontFamily.Serif,fontSize=54.sp,lineHeight=54.sp)
-       Text(if(i==0)t.versi.drop(1) else t.versi,Modifier.weight(1f).padding(top=if(i==0)5.dp else 0.dp),color=ink,fontFamily=FontFamily.Serif,fontStyle=FontStyle.Italic,fontSize=19.sp,lineHeight=30.sp)
+       if(i==0) Surface(color=Color(0xFF1E4C5A),shape=RoundedCornerShape(3.dp)){ Text("N",Modifier.padding(horizontal=8.dp,vertical=2.dp),color=Color(0xFFD29A32),fontFamily=FontFamily.Serif,fontWeight=FontWeight.Bold,fontSize=58.sp,lineHeight=62.sp) }
+       Text(if(i==0)t.versi.drop(1) else t.versi,Modifier.weight(1f).padding(top=if(i==0)5.dp else 0.dp),color=ink,fontFamily=FontFamily.Serif,fontSize=20.sp,lineHeight=31.sp)
       }
       Spacer(Modifier.height(8.dp))
      }
@@ -66,7 +66,7 @@ class MainActivity:ComponentActivity(){
    Spacer(Modifier.height(12.dp))
   }
   AnimatedVisibility(selected!=null,Modifier.align(Alignment.BottomCenter),enter=slideInVertically{it}+fadeIn(),exit=slideOutVertically{it}+fadeOut()){
-   Surface(Modifier.fillMaxWidth().clickable{},color=Color(0xFFF0E3C5),shadowElevation=24.dp){
+   Surface(Modifier.padding(horizontal=12.dp,vertical=10.dp).fillMaxWidth().clickable{},color=Color(0xFFE6C78D),shadowElevation=28.dp,shape=RoundedCornerShape(10.dp)){
     Column(Modifier.padding(24.dp).navigationBarsPadding()){
      Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically){
       Text("COMPRENDERE I VERSI",color=Color(0xFF765238),fontSize=10.sp,letterSpacing=2.sp,fontWeight=FontWeight.Bold)
