@@ -29,18 +29,18 @@ import androidx.compose.ui.unit.sp
 
 data class Terzina(val versi:String,val moderno:String,val nota:String)
 private val cantoI=listOf(
- Terzina("Nel mezzo del cammin di nostra vita
-     mi ritrovai per una selva oscura,
-     ché la diritta via era smarrita.","A metà della vita mi ritrovo in un luogo oscuro: ho perso la strada giusta.","La selva è insieme luogo reale del racconto e immagine dello smarrimento di Dante."),
- Terzina("Ahi quanto a dir qual era è cosa dura
-     esta selva selvaggia e aspra e forte
-     che nel pensier rinova la paura!","È difficile perfino descrivere quanto quel bosco fosse terribile: ricordarlo fa tornare la paura.","Dante ci fa capire che quell'esperienza continua a scuoterlo anche mentre la racconta."),
- Terzina("Tant’è amara che poco è più morte;
-     ma per trattar del ben ch’i’ vi trovai,
-     dirò de l’altre cose ch’i’ v’ho scorte.","Fu un'esperienza quasi peggiore della morte; ma racconterò il bene che vi trovai e ciò che vidi.","La promessa è già qui: dentro lo smarrimento Dante troverà qualcosa capace di salvarlo."),
- Terzina("Io non so ben ridir com’i’ v’intrai,
-     tant’era pien di sonno a quel punto
-     che la verace via abbandonai.","Non so spiegare bene come ci entrai: ero come addormentato quando abbandonai la strada vera.","Il sonno suggerisce inconsapevolezza: ci si può perdere prima ancora di accorgersi di essersi perduti.")
+ Terzina("""Nel mezzo del cammin di nostra vita
+mi ritrovai per una selva oscura,
+ché la diritta via era smarrita.""","A metà della vita mi ritrovo in un luogo oscuro: ho perso la strada giusta.","La selva è insieme luogo reale del racconto e immagine dello smarrimento di Dante."),
+ Terzina("""Ahi quanto a dir qual era è cosa dura
+esta selva selvaggia e aspra e forte
+che nel pensier rinova la paura!""","È difficile perfino descrivere quanto quel bosco fosse terribile: ricordarlo fa tornare la paura.","Dante ci fa capire che quell'esperienza continua a scuoterlo anche mentre la racconta."),
+ Terzina("""Tant’è amara che poco è più morte;
+ma per trattar del ben ch’i’ vi trovai,
+dirò de l’altre cose ch’i’ v’ho scorte.""","Fu un'esperienza quasi peggiore della morte; ma racconterò il bene che vi trovai e ciò che vidi.","La promessa è già qui: dentro lo smarrimento Dante troverà qualcosa capace di salvarlo."),
+ Terzina("""Io non so ben ridir com’i’ v’intrai,
+tant’era pien di sonno a quel punto
+che la verace via abbandonai.""","Non so spiegare come ci entrai: ero come addormentato quando abbandonai la via vera.","Il sonno indica inconsapevolezza: Dante si accorge dello smarrimento quando è già dentro la selva.")
 )
 
 class MainActivity:ComponentActivity(){
