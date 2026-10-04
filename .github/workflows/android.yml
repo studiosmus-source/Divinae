@@ -15,12 +15,6 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-      - name: Install manuscript assets
-        run: |
-          mkdir -p app/src/main/res/font app/src/main/res/drawable-nodpi
-          curl -L --fail https://raw.githubusercontent.com/google/fonts/main/ofl/imfellenglish/IMFeENrm28P.ttf -o app/src/main/res/font/im_fell_english.ttf
-          curl -L --fail 'https://raw.githubusercontent.com/google/fonts/main/ofl/ebgaramond/EBGaramond%5Bwght%5D.ttf' -o app/src/main/res/font/eb_garamond.ttf
-          curl -L --fail 'https://www.bnf.fr/sites/default/files/2019-03/La%20Divina%20commedia%20di%20Dante%20Alighieri%20.jpg' -o app/src/main/res/drawable-nodpi/manuscript_frame.jpg
       - run: gradle assembleDebug
       - uses: actions/upload-artifact@v4
         with:
