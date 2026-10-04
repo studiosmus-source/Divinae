@@ -1,0 +1,9 @@
+<resources>
+<style name="Theme.Divinae" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <item name="android:fontFamily">serif</item>
+    <item name="android:windowFullscreen">true</item>
+    <item name="android:navigationBarColor">#120D0A</item>
+    <item name="android:statusBarColor">#120D0A</item>
+    <item name="android:windowLightStatusBar">false</item>
+</style>
+</resources>
