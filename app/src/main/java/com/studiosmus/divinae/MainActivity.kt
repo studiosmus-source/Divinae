@@ -80,9 +80,9 @@ class MainActivity:ComponentActivity(){
  val musicPlayer=remember{MediaPlayer()}
  val firePlayer=remember{MediaPlayer()}
  DisposableEffect(Unit){
-  fun prepare(p:MediaPlayer,url:String){
-   runCatching{p.setDataSource(context,Uri.parse(url));p.isLooping=true;p.prepareAsync()}
-  }
+  musicPlayer.setOnPreparedListener{it.isLooping=true;it.setVolume(musicVolume,musicVolume);if(musicOn)it.start()}
+  firePlayer.setOnPreparedListener{it.isLooping=true;it.setVolume(fireVolume,fireVolume);if(fireOn)it.start()}
+  fun prepare(p:MediaPlayer,url:String){runCatching{p.setDataSource(context,Uri.parse(url));p.prepareAsync()}}
   prepare(musicPlayer,DivinaeReaderEngine.darkWood.sourceUrl)
   prepare(firePlayer,DivinaeReaderEngine.fireplaceUrl)
   onDispose{runCatching{musicPlayer.release()};runCatching{firePlayer.release()}}
