@@ -9,7 +9,9 @@ data class SafeTextZone(
     val top: Dp,
     val bottom: Dp,
     val maxFontSp: Float = 15f,
-    val minFontSp: Float = 12.5f
+    val minFontSp: Float = 12.5f,
+    val bodyStart: Dp = start,
+    val bodyEnd: Dp = end
 )
 
 data class IllustratedPageTemplate(
@@ -32,7 +34,9 @@ object DivinaeReaderEngine {
             start = 112.dp,
             end = 72.dp,
             top = 52.dp,
-            bottom = 128.dp
+            bottom = 128.dp,
+            bodyStart = 122.dp,
+            bodyEnd = 46.dp
         )
     )
 
