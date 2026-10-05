@@ -72,6 +72,7 @@ class MainActivity:ComponentActivity(){
  var page by rememberSaveable{mutableIntStateOf(0)}
  var selected by rememberSaveable{mutableStateOf<Int?>(null)}
  var drawer by rememberSaveable{mutableStateOf<String?>(null)}
+ var tabsVisible by rememberSaveable{mutableStateOf(false)}
  val context=LocalContext.current
  var musicOn by rememberSaveable{mutableStateOf(false)}
  var fireOn by rememberSaveable{mutableStateOf(false)}
@@ -104,7 +105,7 @@ class MainActivity:ComponentActivity(){
    Text("CANTO I",fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=22.sp,color=Ink)
    Box(Modifier.padding(vertical=7.dp).width(84.dp).height(1.dp).background(Gold.copy(.7f)))
    Column(Modifier.weight(1f).verticalScroll(rememberScrollState())){
-    val range=if(page==0) 0..1 else 2..3
+    val range=if(page==0) 0..2 else 3..3
     range.forEach{ i ->
      val t=cantoI[i]
      val active=selected==i
@@ -115,7 +116,7 @@ class MainActivity:ComponentActivity(){
        .clickable{selected=i}.padding(horizontal=5.dp,vertical=5.dp)
      ){
       Text("${i*3+1}",fontFamily=Book,fontSize=10.sp,color=Red.copy(.75f))
-      Text(t.versi,fontFamily=Book,fontSize=14.sp,lineHeight=19.sp,color=Ink)
+      Text(t.versi,fontFamily=Book,fontSize=13.sp,lineHeight=17.sp,color=Ink)
      }
     }
    }
@@ -126,13 +127,23 @@ class MainActivity:ComponentActivity(){
     Text("›",Modifier.clickable(enabled=page<1){page++;selected=null}.padding(8.dp),fontFamily=Book,fontSize=28.sp,color=if(page<1) Red else Ink.copy(.2f))
    }
   }
-  Column(Modifier.align(Alignment.CenterEnd).padding(end=3.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
-   listOf("♫" to "Musica","🔥" to "Atmosfera","☰" to "Indice").forEach{(icon,name)->
-    Text(icon,Modifier.clip(RoundedCornerShape(topStart=10.dp,bottomStart=10.dp)).background(Color(0xFF4A2417).copy(.92f)).clickable{drawer=if(drawer==name)null else name}.padding(horizontal=10.dp,vertical=12.dp),fontSize=20.sp,color=Gold)
+  Box(Modifier.align(Alignment.CenterEnd)){
+   if(!tabsVisible && drawer==null){
+    Text("‹",Modifier.clip(RoundedCornerShape(topStart=10.dp,bottomStart=10.dp)).background(Color(0xFF4A2417).copy(.82f))
+     .clickable{tabsVisible=true}.padding(horizontal=5.dp,vertical=18.dp),fontFamily=Book,fontSize=18.sp,color=Gold)
+   }
+   AnimatedVisibility(tabsVisible && drawer==null,enter=fadeIn(),exit=fadeOut()){
+    Column(verticalArrangement=Arrangement.spacedBy(8.dp),horizontalAlignment=Alignment.End){
+     Text("›",Modifier.clickable{tabsVisible=false}.padding(8.dp),fontFamily=Book,fontSize=18.sp,color=Gold)
+     listOf("♫" to "Musica","🔥" to "Atmosfera","☰" to "Indice").forEach{(icon,name)->
+      Text(icon,Modifier.clip(RoundedCornerShape(topStart=10.dp,bottomStart=10.dp)).background(Color(0xFF4A2417).copy(.92f))
+       .clickable{drawer=name}.padding(horizontal=10.dp,vertical=11.dp),fontSize=19.sp,color=Gold)
+     }
+    }
    }
   }
   AnimatedVisibility(drawer!=null,enter=fadeIn(),exit=fadeOut(),modifier=Modifier.align(Alignment.CenterEnd)){
-   Column(Modifier.padding(end=38.dp).width(190.dp).background(Color(0xFFF3E8CF)).clickable{drawer=null}.padding(16.dp)){
+   Column(Modifier.padding(end=38.dp).width(190.dp).background(Color(0xFFF3E8CF)).clickable{drawer=null;tabsVisible=false}.padding(16.dp)){
     Text(drawer?:"",fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=18.sp,color=Red)
     Spacer(Modifier.height(8.dp))
     when(drawer){
