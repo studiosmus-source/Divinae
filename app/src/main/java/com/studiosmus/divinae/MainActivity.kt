@@ -100,13 +100,15 @@ class MainActivity:ComponentActivity(){
   // Il testo resta nativo: l'illustrazione è solo la materia fisica del manoscritto.
   Column(
    Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()
-    .padding(start=DivinaeReaderEngine.cantoOne.safeZone.start,end=DivinaeReaderEngine.cantoOne.safeZone.end,top=DivinaeReaderEngine.cantoOne.safeZone.top,bottom=DivinaeReaderEngine.cantoOne.safeZone.bottom),
+    .padding(top=DivinaeReaderEngine.cantoOne.safeZone.top,bottom=DivinaeReaderEngine.cantoOne.safeZone.bottom),
    horizontalAlignment=Alignment.CenterHorizontally
   ){
-   Text("INFERNO",fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=13.sp,letterSpacing=3.sp,color=Red)
-   Text("CANTO I",fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=22.sp,color=Ink)
-   Box(Modifier.padding(vertical=7.dp).width(84.dp).height(1.dp).background(Gold.copy(.7f)))
-   Column(Modifier.weight(1f).verticalScroll(rememberScrollState())){
+   Column(Modifier.fillMaxWidth().padding(start=DivinaeReaderEngine.cantoOne.safeZone.start,end=DivinaeReaderEngine.cantoOne.safeZone.end),horizontalAlignment=Alignment.CenterHorizontally){
+    Text("INFERNO",fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=13.sp,letterSpacing=3.sp,color=Red)
+    Text("CANTO I",fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=22.sp,color=Ink)
+    Box(Modifier.padding(vertical=7.dp).width(84.dp).height(1.dp).background(Gold.copy(.7f)))
+   }
+   Column(Modifier.weight(1f).fillMaxWidth().padding(start=DivinaeReaderEngine.cantoOne.safeZone.bodyStart,end=DivinaeReaderEngine.cantoOne.safeZone.bodyEnd).verticalScroll(rememberScrollState())){
     val range=if(page==0) 0..2 else 3..3
     range.forEach{ i ->
      val t=cantoI[i]
@@ -122,8 +124,10 @@ class MainActivity:ComponentActivity(){
      }
     }
    }
-   Text("Tocca una terzina per comprenderla",fontFamily=Book,fontStyle=FontStyle.Italic,fontSize=9.sp,color=Ink.copy(.68f))
-   Row(Modifier.fillMaxWidth().padding(top=7.dp),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically){
+   Column(Modifier.fillMaxWidth().padding(start=DivinaeReaderEngine.cantoOne.safeZone.bodyStart,end=DivinaeReaderEngine.cantoOne.safeZone.bodyEnd),horizontalAlignment=Alignment.CenterHorizontally){
+    Text("Tocca una terzina per comprenderla",fontFamily=Book,fontStyle=FontStyle.Italic,fontSize=9.sp,color=Ink.copy(.68f))
+   }
+   Row(Modifier.fillMaxWidth().padding(start=DivinaeReaderEngine.cantoOne.safeZone.bodyStart,end=DivinaeReaderEngine.cantoOne.safeZone.bodyEnd,top=7.dp),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically){
     Text("‹",Modifier.clickable(enabled=page>0){page--;selected=null}.padding(8.dp),fontFamily=Book,fontSize=28.sp,color=if(page>0) Red else Ink.copy(.2f))
     Text("${page+1} / 2",fontFamily=Book,fontSize=12.sp,color=Ink)
     Text("›",Modifier.clickable(enabled=page<1){page++;selected=null}.padding(8.dp),fontFamily=Book,fontSize=28.sp,color=if(page<1) Red else Ink.copy(.2f))
