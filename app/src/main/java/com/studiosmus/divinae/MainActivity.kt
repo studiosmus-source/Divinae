@@ -180,7 +180,7 @@ class MainActivity:ComponentActivity(){
        else{
         val p=firePlayer
         if(p==null){fireStatus="ERRORE AUDIO"}
-        else{runCatching{p.seekTo(0);p.setVolume(fireVolume,fireVolume);p.start();fireOn=true;fireStatus=if(p.isPlaying)"IN RIPRODUZIONE" else "ERRORE RIPRODUZIONE"}
+        else{runCatching{p.seekTo(0);p.setVolume(fireVolume,fireVolume);p.start();fireOn=true;fireStatus=if(p.isPlaying)"IN RIPRODUZIONE" else "ERRORE RIPRODUZIONE"}}
        }
       }.padding(vertical=10.dp),fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=15.sp,color=Red)
       Slider(value=fireVolume,onValueChange={fireVolume=it})
