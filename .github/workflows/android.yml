@@ -19,9 +19,6 @@ jobs:
         run: |
           mkdir -p app/src/main/res/raw
           curl -L --fail --retry 3 "https://raw.githubusercontent.com/yessur3808/atmosphere/75afc5bbe3313d6c43ef4cf5c079ce23a1de1200/public/assets/audio-low/fire/01-small-hearth.mp3" -o /tmp/fireplace-source.mp3
-          python3 - <<'PY'
-          import audioop, wave
-          PY
           cp /tmp/fireplace-source.mp3 app/src/main/res/raw/fireplace.mp3
           test -s app/src/main/res/raw/fireplace.mp3
       - run: gradle assembleDebug
