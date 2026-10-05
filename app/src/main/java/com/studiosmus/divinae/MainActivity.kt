@@ -74,6 +74,7 @@ class MainActivity:ComponentActivity(){
  var drawer by rememberSaveable{mutableStateOf<String?>(null)}
  var tabsVisible by rememberSaveable{mutableStateOf(false)}
  val context=LocalContext.current
+ var fireStatus by rememberSaveable{mutableStateOf("PRONTO")}
  var musicOn by rememberSaveable{mutableStateOf(false)}
  var fireOn by rememberSaveable{mutableStateOf(false)}
  var musicVolume by rememberSaveable{mutableFloatStateOf(.55f)}
@@ -81,6 +82,7 @@ class MainActivity:ComponentActivity(){
  val musicPlayer=remember{MediaPlayer()}
  val firePlayer=remember{MediaPlayer.create(context,R.raw.fireplace)}
  var fireReady by remember{mutableStateOf(firePlayer != null)}
+ LaunchedEffect(fireReady){fireStatus=if(fireReady) "PRONTO" else "ERRORE: audio locale non caricato"}
  DisposableEffect(Unit){
   musicPlayer.setOnPreparedListener{it.isLooping=true;it.setVolume(musicVolume,musicVolume);if(musicOn)it.start()}
 
@@ -91,7 +93,11 @@ class MainActivity:ComponentActivity(){
   onDispose{runCatching{musicPlayer.release()};runCatching{firePlayer?.release()}}
  }
  LaunchedEffect(musicOn,musicVolume){musicPlayer.setVolume(musicVolume,musicVolume);if(musicOn){runCatching{musicPlayer.start()}}else{runCatching{musicPlayer.pause()}}}
- LaunchedEffect(fireOn,fireVolume,fireReady){firePlayer?.setVolume(fireVolume,fireVolume);if(fireOn){runCatching{firePlayer?.start()}}else{runCatching{firePlayer?.pause()}}}
+ LaunchedEffect(fireOn,fireVolume,fireReady){
+  firePlayer?.setVolume(fireVolume,fireVolume)
+  if(fireOn){val ok=runCatching{firePlayer?.start(); firePlayer?.isPlaying==true}.getOrDefault(false);fireStatus=if(ok) "IN RIPRODUZIONE" else "ERRORE RIPRODUZIONE"}
+  else{runCatching{firePlayer?.pause()};fireStatus=if(fireReady) "PRONTO" else "ERRORE AUDIO"}
+ }
  Box(Modifier.fillMaxSize().background(Color(0xFF100806))){
   androidx.compose.foundation.Image(
    painterResource(R.drawable.manuscript_frame),null,
@@ -120,7 +126,7 @@ class MainActivity:ComponentActivity(){
        .clickable{selected=i}.padding(horizontal=4.dp,vertical=3.dp)
      ){
       Text("${i*3+1}",fontFamily=Book,fontSize=10.sp,color=Red.copy(.75f))
-      Text(t.versi,fontFamily=Book,fontSize=12.sp,lineHeight=15.5.sp,color=Ink)
+      Text(t.versi,fontFamily=Book,fontSize=15.sp,lineHeight=20.sp,color=Ink)
      }
     }
    }
@@ -160,6 +166,7 @@ class MainActivity:ComponentActivity(){
      }
      "Atmosfera"->{
       Text("Camino",fontFamily=Modern,fontSize=14.sp,color=Ink)
+      Text(fireStatus,fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=11.sp,color=if(fireStatus.startsWith("ERRORE")) Red else Ink.copy(.65f))
       Text(if(fireOn)"🔥  Spegni" else "🔥  Accendi",Modifier.fillMaxWidth().clickable{fireOn=!fireOn}.padding(vertical=10.dp),fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=15.sp,color=Red)
       Slider(value=fireVolume,onValueChange={fireVolume=it})
      }
