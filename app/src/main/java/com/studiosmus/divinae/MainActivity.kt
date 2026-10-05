@@ -24,7 +24,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -104,13 +103,6 @@ class MainActivity:ComponentActivity(){
    painterResource(R.drawable.manuscript_frame),null,
    Modifier.fillMaxSize(),contentScale=ContentScale.FillBounds
   )
-  // Alleggerisce la vecchia tavola: la pergamena copre la decorazione interna
-  // e lascia visibili solo bordo sottile e paesaggio inferiore.
-  androidx.compose.foundation.Image(
-   painterResource(R.drawable.parchment),null,
-   Modifier.fillMaxWidth().fillMaxHeight(.78f).padding(start=34.dp,end=28.dp,top=32.dp),
-   contentScale=ContentScale.FillBounds
-  )
   // Il testo resta nativo e cliccabile.
   Column(
    Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()
@@ -134,7 +126,7 @@ class MainActivity:ComponentActivity(){
        .clickable{selected=i}.padding(horizontal=4.dp,vertical=3.dp)
      ){
       Text("${i*3+1}",fontFamily=Book,fontSize=10.sp,color=Red.copy(.75f))
-      Text(t.versi,fontFamily=Book,fontSize=16.sp,lineHeight=22.sp,color=Ink)
+      Text(t.versi,fontFamily=Book,fontSize=15.sp,lineHeight=20.sp,color=Ink)
      }
     }
    }
