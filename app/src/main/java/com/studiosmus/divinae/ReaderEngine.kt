@@ -45,5 +45,5 @@ object DivinaeReaderEngine {
     )
 
     const val fireplaceUrl =
-        "https://commons.wikimedia.org/wiki/Special:Redirect/file/Dry_grass_burning_in_open_fireplace.ogg"
+        "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bones_breaking_wood_fire_ice_crackling.ogg"
 }
