@@ -79,13 +79,14 @@ class MainActivity:ComponentActivity(){
  var musicVolume by rememberSaveable{mutableFloatStateOf(.55f)}
  var fireVolume by rememberSaveable{mutableFloatStateOf(.45f)}
  val musicPlayer=remember{MediaPlayer()}
- val firePlayer=remember{MediaPlayer()}
+ val firePlayer=remember{MediaPlayer.create(context,R.raw.fireplace)}
  DisposableEffect(Unit){
   musicPlayer.setOnPreparedListener{it.isLooping=true;it.setVolume(musicVolume,musicVolume);if(musicOn)it.start()}
-  firePlayer.setOnPreparedListener{it.isLooping=true;it.setVolume(fireVolume,fireVolume);if(fireOn)it.start()}
+
   fun prepare(p:MediaPlayer,url:String){runCatching{p.setDataSource(context,Uri.parse(url));p.prepareAsync()}}
   prepare(musicPlayer,DivinaeReaderEngine.darkWood.sourceUrl)
-  prepare(firePlayer,DivinaeReaderEngine.fireplaceUrl)
+  firePlayer.isLooping=true
+  firePlayer.setVolume(fireVolume,fireVolume)
   onDispose{runCatching{musicPlayer.release()};runCatching{firePlayer.release()}}
  }
  LaunchedEffect(musicOn,musicVolume){musicPlayer.setVolume(musicVolume,musicVolume);if(musicOn){runCatching{musicPlayer.start()}}else{runCatching{musicPlayer.pause()}}}
