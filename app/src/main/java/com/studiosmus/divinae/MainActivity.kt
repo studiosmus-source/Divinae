@@ -80,17 +80,18 @@ class MainActivity:ComponentActivity(){
  var fireVolume by rememberSaveable{mutableFloatStateOf(.45f)}
  val musicPlayer=remember{MediaPlayer()}
  val firePlayer=remember{MediaPlayer.create(context,R.raw.fireplace)}
+ var fireReady by remember{mutableStateOf(firePlayer != null)}
  DisposableEffect(Unit){
   musicPlayer.setOnPreparedListener{it.isLooping=true;it.setVolume(musicVolume,musicVolume);if(musicOn)it.start()}
 
   fun prepare(p:MediaPlayer,url:String){runCatching{p.setDataSource(context,Uri.parse(url));p.prepareAsync()}}
   prepare(musicPlayer,DivinaeReaderEngine.darkWood.sourceUrl)
-  firePlayer.isLooping=true
-  firePlayer.setVolume(fireVolume,fireVolume)
-  onDispose{runCatching{musicPlayer.release()};runCatching{firePlayer.release()}}
+  firePlayer?.isLooping=true
+  firePlayer?.setVolume(fireVolume,fireVolume)
+  onDispose{runCatching{musicPlayer.release()};runCatching{firePlayer?.release()}}
  }
  LaunchedEffect(musicOn,musicVolume){musicPlayer.setVolume(musicVolume,musicVolume);if(musicOn){runCatching{musicPlayer.start()}}else{runCatching{musicPlayer.pause()}}}
- LaunchedEffect(fireOn,fireVolume){firePlayer.setVolume(fireVolume,fireVolume);if(fireOn){runCatching{firePlayer.start()}}else{runCatching{firePlayer.pause()}}}
+ LaunchedEffect(fireOn,fireVolume,fireReady){firePlayer?.setVolume(fireVolume,fireVolume);if(fireOn){runCatching{firePlayer?.start()}}else{runCatching{firePlayer?.pause()}}}
  Box(Modifier.fillMaxSize().background(Color(0xFF100806))){
   androidx.compose.foundation.Image(
    painterResource(R.drawable.manuscript_frame),null,
@@ -111,17 +112,17 @@ class MainActivity:ComponentActivity(){
      val t=cantoI[i]
      val active=selected==i
      Column(
-      Modifier.fillMaxWidth().padding(vertical=5.dp)
+      Modifier.fillMaxWidth().padding(vertical=3.dp)
        .clip(RoundedCornerShape(4.dp))
        .background(if(active) Gold.copy(alpha=.19f) else Color.Transparent)
-       .clickable{selected=i}.padding(horizontal=5.dp,vertical=5.dp)
+       .clickable{selected=i}.padding(horizontal=4.dp,vertical=3.dp)
      ){
       Text("${i*3+1}",fontFamily=Book,fontSize=10.sp,color=Red.copy(.75f))
-      Text(t.versi,fontFamily=Book,fontSize=13.sp,lineHeight=17.sp,color=Ink)
+      Text(t.versi,fontFamily=Book,fontSize=12.sp,lineHeight=15.5.sp,color=Ink)
      }
     }
    }
-   Text("Tocca una terzina per comprenderla",fontFamily=Book,fontStyle=FontStyle.Italic,fontSize=11.sp,color=Ink.copy(.68f))
+   Text("Tocca una terzina per comprenderla",fontFamily=Book,fontStyle=FontStyle.Italic,fontSize=9.sp,color=Ink.copy(.68f))
    Row(Modifier.fillMaxWidth().padding(top=7.dp),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically){
     Text("‹",Modifier.clickable(enabled=page>0){page--;selected=null}.padding(8.dp),fontFamily=Book,fontSize=28.sp,color=if(page>0) Red else Ink.copy(.2f))
     Text("${page+1} / 2",fontFamily=Book,fontSize=12.sp,color=Ink)
