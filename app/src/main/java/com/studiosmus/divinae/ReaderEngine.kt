@@ -35,8 +35,8 @@ object DivinaeReaderEngine {
             end = 72.dp,
             top = 52.dp,
             bottom = 128.dp,
-            bodyStart = 122.dp,
-            bodyEnd = 46.dp
+            bodyStart = 72.dp,
+            bodyEnd = 42.dp
         )
     )
 
