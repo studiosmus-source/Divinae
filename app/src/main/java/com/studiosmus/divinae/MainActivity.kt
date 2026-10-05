@@ -109,12 +109,12 @@ class MainActivity:ComponentActivity(){
     .padding(top=DivinaeReaderEngine.cantoOne.safeZone.top,bottom=DivinaeReaderEngine.cantoOne.safeZone.bottom),
    horizontalAlignment=Alignment.CenterHorizontally
   ){
-   Column(Modifier.fillMaxWidth().padding(start=DivinaeReaderEngine.cantoOne.safeZone.start,end=DivinaeReaderEngine.cantoOne.safeZone.end),horizontalAlignment=Alignment.CenterHorizontally){
+   Column(Modifier.fillMaxWidth().padding(start=82.dp,end=52.dp),horizontalAlignment=Alignment.CenterHorizontally){
     Text("INFERNO",fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=13.sp,letterSpacing=3.sp,color=Red)
     Text("CANTO I",fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=22.sp,color=Ink)
     Box(Modifier.padding(vertical=7.dp).width(84.dp).height(1.dp).background(Gold.copy(.7f)))
    }
-   Column(Modifier.weight(1f).fillMaxWidth().padding(start=DivinaeReaderEngine.cantoOne.safeZone.bodyStart,end=DivinaeReaderEngine.cantoOne.safeZone.bodyEnd).verticalScroll(rememberScrollState())){
+   Column(Modifier.weight(1f).fillMaxWidth().padding(start=142.dp,end=54.dp).verticalScroll(rememberScrollState())){
     val range=if(page==0) 0..2 else 3..3
     range.forEach{ i ->
      val t=cantoI[i]
@@ -126,14 +126,14 @@ class MainActivity:ComponentActivity(){
        .clickable{selected=i}.padding(horizontal=4.dp,vertical=3.dp)
      ){
       Text("${i*3+1}",fontFamily=Book,fontSize=10.sp,color=Red.copy(.75f))
-      Text(t.versi,fontFamily=Book,fontSize=15.sp,lineHeight=20.sp,color=Ink)
+      Text(t.versi,fontFamily=Book,fontSize=14.sp,lineHeight=19.sp,color=Ink)
      }
     }
    }
-   Column(Modifier.fillMaxWidth().padding(start=DivinaeReaderEngine.cantoOne.safeZone.bodyStart,end=DivinaeReaderEngine.cantoOne.safeZone.bodyEnd),horizontalAlignment=Alignment.CenterHorizontally){
+   Column(Modifier.fillMaxWidth().padding(start=142.dp,end=54.dp),horizontalAlignment=Alignment.CenterHorizontally){
     Text("Tocca una terzina per comprenderla",fontFamily=Book,fontStyle=FontStyle.Italic,fontSize=9.sp,color=Ink.copy(.68f))
    }
-   Row(Modifier.fillMaxWidth().padding(start=DivinaeReaderEngine.cantoOne.safeZone.bodyStart,end=DivinaeReaderEngine.cantoOne.safeZone.bodyEnd,top=7.dp),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically){
+   Row(Modifier.fillMaxWidth().padding(start=142.dp,end=54.dp,top=7.dp),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically){
     Text("‹",Modifier.clickable(enabled=page>0){page--;selected=null}.padding(8.dp),fontFamily=Book,fontSize=28.sp,color=if(page>0) Red else Ink.copy(.2f))
     Text("${page+1} / 2",fontFamily=Book,fontSize=12.sp,color=Ink)
     Text("›",Modifier.clickable(enabled=page<1){page++;selected=null}.padding(8.dp),fontFamily=Book,fontSize=28.sp,color=if(page<1) Red else Ink.copy(.2f))
@@ -155,7 +155,7 @@ class MainActivity:ComponentActivity(){
    }
   }
   AnimatedVisibility(drawer!=null,enter=fadeIn(),exit=fadeOut(),modifier=Modifier.align(Alignment.CenterEnd)){
-   Column(Modifier.padding(end=38.dp).width(190.dp).background(Color(0xFFF3E8CF)).clickable{drawer=null;tabsVisible=false}.padding(16.dp)){
+   Column(Modifier.padding(end=38.dp).width(210.dp).background(Color(0xFFF3E8CF)).padding(16.dp)){
     Text(drawer?:"",fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=18.sp,color=Red)
     Spacer(Modifier.height(8.dp))
     when(drawer){
