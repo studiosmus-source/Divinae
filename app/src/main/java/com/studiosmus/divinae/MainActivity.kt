@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -103,7 +104,14 @@ class MainActivity:ComponentActivity(){
    painterResource(R.drawable.manuscript_frame),null,
    Modifier.fillMaxSize(),contentScale=ContentScale.FillBounds
   )
-  // Il testo resta nativo: l'illustrazione è solo la materia fisica del manoscritto.
+  // Alleggerisce la vecchia tavola: la pergamena copre la decorazione interna
+  // e lascia visibili solo bordo sottile e paesaggio inferiore.
+  androidx.compose.foundation.Image(
+   painterResource(R.drawable.parchment),null,
+   Modifier.fillMaxWidth().fillMaxHeight(.78f).padding(start=34.dp,end=28.dp,top=32.dp),
+   contentScale=ContentScale.FillBounds
+  )
+  // Il testo resta nativo e cliccabile.
   Column(
    Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()
     .padding(top=DivinaeReaderEngine.cantoOne.safeZone.top,bottom=DivinaeReaderEngine.cantoOne.safeZone.bottom),
@@ -126,7 +134,7 @@ class MainActivity:ComponentActivity(){
        .clickable{selected=i}.padding(horizontal=4.dp,vertical=3.dp)
      ){
       Text("${i*3+1}",fontFamily=Book,fontSize=10.sp,color=Red.copy(.75f))
-      Text(t.versi,fontFamily=Book,fontSize=15.sp,lineHeight=20.sp,color=Ink)
+      Text(t.versi,fontFamily=Book,fontSize=16.sp,lineHeight=22.sp,color=Ink)
      }
     }
    }
@@ -167,7 +175,14 @@ class MainActivity:ComponentActivity(){
      "Atmosfera"->{
       Text("Camino",fontFamily=Modern,fontSize=14.sp,color=Ink)
       Text(fireStatus,fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=11.sp,color=if(fireStatus.startsWith("ERRORE")) Red else Ink.copy(.65f))
-      Text(if(fireOn)"🔥  Spegni" else "🔥  Accendi",Modifier.fillMaxWidth().clickable{fireOn=!fireOn}.padding(vertical=10.dp),fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=15.sp,color=Red)
+      Text(if(fireOn)"🔥  Spegni" else "🔥  Accendi",Modifier.fillMaxWidth().clickable{
+       if(fireOn){runCatching{firePlayer?.pause()};fireOn=false;fireStatus="PRONTO"}
+       else{
+        val p=firePlayer
+        if(p==null){fireStatus="ERRORE AUDIO"}
+        else{runCatching{p.seekTo(0);p.setVolume(fireVolume,fireVolume);p.start();fireOn=true;fireStatus=if(p.isPlaying)"IN RIPRODUZIONE" else "ERRORE RIPRODUZIONE"}
+       }
+      }.padding(vertical=10.dp),fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=15.sp,color=Red)
       Slider(value=fireVolume,onValueChange={fireVolume=it})
      }
      else->Text("INFERNO\n• Canto I — La selva oscura\n\nPURGATORIO\nPARADISO",fontFamily=Modern,fontSize=14.sp,lineHeight=21.sp,color=Ink)
