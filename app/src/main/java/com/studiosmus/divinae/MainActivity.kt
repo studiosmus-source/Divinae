@@ -44,11 +44,12 @@ class MainActivity:ComponentActivity(){override fun onCreate(b:Bundle?){super.on
  var musicPlayer by remember{mutableStateOf<MediaPlayer?>(null)};var activeMusic by remember{mutableStateOf("")}
  val flip=remember{Animatable(0f)};var flipDir by remember{mutableIntStateOf(1)};val scope=rememberCoroutineScope()
  val fireId=remember{context.resources.getIdentifier("fireplace","raw",context.packageName)}
- val firePlayer=remember(fireId){if(fireId!=0)MediaPlayer.create(context,fireId) else null}
+ var firePlayer by remember{mutableStateOf<MediaPlayer?>(null)}
+ LaunchedEffect(fireId){if(fireId!=0&&firePlayer==null){firePlayer=runCatching{MediaPlayer.create(context,fireId)}.getOrNull();firePlayer?.isLooping=true;fireStatus=if(firePlayer==null)"ERRORE AUDIO" else "PRONTO"}}
  val lifecycle=LocalLifecycleOwner.current.lifecycle
  val currentMusic=remember(page,canto){val per=3; canto.terzine[(page*per).coerceAtMost(canto.terzine.lastIndex)].music}
  val musicId=remember(currentMusic){when(currentMusic){"o_frondens"->context.resources.getIdentifier("music_selva","raw",context.packageName);"dies_irae"->context.resources.getIdentifier("music_smarrimento","raw",context.packageName);else->0}}
- DisposableEffect(firePlayer,lifecycle){firePlayer?.isLooping=true;val o=LifecycleEventObserver{_,e->if(e==Lifecycle.Event.ON_STOP){runCatching{firePlayer?.pause()};fireOn=false;fireStatus=if(firePlayer==null)"AUDIO NON INSTALLATO" else "PRONTO"}};lifecycle.addObserver(o);onDispose{lifecycle.removeObserver(o);runCatching{firePlayer?.release()};runCatching{musicPlayer?.release()}}}
+ DisposableEffect(lifecycle){val o=LifecycleEventObserver{_,e->if(e==Lifecycle.Event.ON_STOP){runCatching{firePlayer?.pause()};fireOn=false;fireStatus=if(firePlayer==null)"AUDIO NON INSTALLATO" else "PRONTO"}};lifecycle.addObserver(o);onDispose{lifecycle.removeObserver(o)}}
  LaunchedEffect(musicId,musicOn){
   if(!musicOn||musicId==0){runCatching{musicPlayer?.pause()};musicStatus=if(musicId==0)"TRACCIA NON DISPONIBILE" else "PAUSA";return@LaunchedEffect}
   if(activeMusic==currentMusic&&musicPlayer!=null){runCatching{musicPlayer?.start()};musicStatus="IN RIPRODUZIONE";return@LaunchedEffect}
@@ -62,8 +63,12 @@ class MainActivity:ComponentActivity(){override fun onCreate(b:Bundle?){super.on
  BackHandler(enabled=selected!=null||drawer!=null||tabs){when{selected!=null->selected=null;drawer!=null->drawer=null;else->tabs=false}}
  BoxWithConstraints(Modifier.fillMaxSize().background(Color(0xFF160B07))){
   val perPage=if(maxHeight>=760.dp)3 else 2;val pageCount=((canto.terzine.size+perPage-1)/perPage).coerceAtLeast(1);val start=page*perPage;val end=(start+perPage).coerceAtMost(canto.terzine.size)
-  Image(painterResource(R.drawable.manuscript_frame),null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
-  if(page>0) Box(Modifier.fillMaxWidth(.84f).fillMaxHeight(.78f).align(Alignment.TopCenter).statusBarsPadding().padding(top=24.dp).background(Color(0xFFF0D9A8)))
+  if(page==0) Image(painterResource(R.drawable.manuscript_frame),null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
+  else {
+   Box(Modifier.fillMaxSize().background(Color(0xFF2A120A)))
+   Box(Modifier.fillMaxSize().padding(horizontal=14.dp,vertical=20.dp).background(Color(0xFFE7C98F)))
+   Box(Modifier.fillMaxSize().padding(horizontal=22.dp,vertical=28.dp).border(2.dp,Gold).padding(5.dp).border(1.dp,Red.copy(.72f)))
+  }
   val pageMod=if(page==0) Modifier.fillMaxWidth(.72f).fillMaxHeight(.68f).align(Alignment.TopEnd).statusBarsPadding().padding(top=46.dp,end=34.dp)
               else Modifier.fillMaxWidth(.78f).fillMaxHeight(.70f).align(Alignment.TopCenter).statusBarsPadding().padding(top=42.dp)
   Box(pageMod.graphicsLayer{rotationY=flip.value;cameraDistance=18f*density;transformOrigin=if(flipDir>0)TransformOrigin(1f,.5f) else TransformOrigin(0f,.5f)}.padding(horizontal=10.dp,vertical=8.dp)){
