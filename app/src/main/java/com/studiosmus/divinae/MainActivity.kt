@@ -42,11 +42,11 @@ class MainActivity:ComponentActivity(){override fun onCreate(b:Bundle?){super.on
  BoxWithConstraints(Modifier.fillMaxSize().background(Color(0xFF160B07))){
   val perPage=if(maxHeight>=760.dp)3 else 2;val pageCount=((canto.terzine.size+perPage-1)/perPage).coerceAtLeast(1);val start=page*perPage;val end=(start+perPage).coerceAtMost(canto.terzine.size)
   Image(painterResource(R.drawable.manuscript_frame),null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
-  Box(Modifier.fillMaxWidth(.84f).fillMaxHeight(.76f).align(Alignment.TopCenter).statusBarsPadding().padding(top=18.dp).clip(RoundedCornerShape(5.dp)).background(Color(0xFFF1DEB5)).padding(horizontal=22.dp,vertical=18.dp)){
+  Box(Modifier.fillMaxWidth(.72f).fillMaxHeight(.68f).align(Alignment.TopEnd).statusBarsPadding().padding(top=46.dp,end=34.dp).padding(horizontal=10.dp,vertical=8.dp)){
    Column(Modifier.fillMaxSize(),horizontalAlignment=Alignment.CenterHorizontally){
     Text(canto.cantica.uppercase(),fontFamily=Book,fontSize=13.sp,letterSpacing=3.sp,color=Red);Text("CANTO "+roman(canto.numero),fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=22.sp,color=Ink)
     Box(Modifier.padding(vertical=6.dp).width(84.dp).height(1.dp).background(Gold))
-    Column(Modifier.weight(1f).fillMaxWidth()){(start until end).forEach{i->val t=canto.terzine[i];Column(Modifier.fillMaxWidth().clickable{selected=i}.padding(vertical=6.dp)){Text((i*3+1).toString(),fontFamily=Book,fontSize=11.sp,color=Red);Text(t.versi,fontFamily=Book,fontSize=16.sp,lineHeight=21.sp,color=Ink)}}}
+    Column(Modifier.weight(1f).fillMaxWidth()){(start until end).forEach{i->val t=canto.terzine[i];Column(Modifier.fillMaxWidth().clickable{selected=i}.padding(vertical=6.dp)){Text((i*3+1).toString(),fontFamily=Book,fontSize=11.sp,color=Red);Text(t.versi,fontFamily=Book,fontSize=15.sp,lineHeight=20.sp,color=Ink)}}}
     Text("Tocca una terzina per comprenderla",fontFamily=Book,fontSize=11.sp,color=Ink.copy(.62f))
     Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically){Text("‹",Modifier.clickable(enabled=page>0){page--;selected=null}.padding(12.dp),fontSize=30.sp,color=if(page>0)Red else Ink.copy(.2f));Text((page+1).toString()+" / "+pageCount,fontFamily=Book,fontSize=13.sp,color=Ink);Text("›",Modifier.clickable(enabled=page<pageCount-1){page++;selected=null}.padding(12.dp),fontSize=30.sp,color=if(page<pageCount-1)Red else Ink.copy(.2f))}
    }
