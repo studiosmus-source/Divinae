@@ -1,9 +1,35 @@
 {
-  "cantica":"Inferno","canto":1,"title":"La selva oscura",
-  "terzine":[
-    {"versi":"Nel mezzo del cammin di nostra vita\nmi ritrovai per una selva oscura,\nché la diritta via era smarrita.","moderno":"A metà della vita mi ritrovo in un luogo oscuro: ho perso la strada giusta.","nota":"La selva è insieme luogo reale del racconto e immagine dello smarrimento di Dante."},
-    {"versi":"Ahi quanto a dir qual era è cosa dura\nesta selva selvaggia e aspra e forte\nche nel pensier rinova la paura!","moderno":"È difficile perfino descrivere quanto quel bosco fosse terribile: ricordarlo fa tornare la paura.","nota":"Dante ci fa capire che quell'esperienza continua a scuoterlo anche mentre la racconta."},
-    {"versi":"Tant’è amara che poco è più morte;\nma per trattar del ben ch’i’ vi trovai,\ndirò de l’altre cose ch’i’ v’ho scorte.","moderno":"Fu un'esperienza quasi peggiore della morte; ma racconterò il bene che vi trovai e ciò che vidi.","nota":"La promessa è già qui: dentro lo smarrimento Dante troverà qualcosa capace di salvarlo."},
-    {"versi":"Io non so ben ridir com’i’ v’intrai,\ntant’era pien di sonno a quel punto\nche la verace via abbandonai.","moderno":"Non so spiegare come ci entrai: ero come addormentato quando abbandonai la via vera.","nota":"Il sonno indica inconsapevolezza: Dante si accorge dello smarrimento quando è già dentro la selva."}
+  "cantica": "Inferno",
+  "canto": 1,
+  "title": "La selva oscura",
+  "terzine": [
+    {
+      "versi": "Nel mezzo del cammin di nostra vita\nmi ritrovai per una selva oscura,\nché la diritta via era smarrita.",
+      "moderno": "A metà della vita mi ritrovo in un luogo oscuro: ho perso la strada giusta.",
+      "nota": "La selva è insieme luogo reale del racconto e immagine dello smarrimento di Dante.",
+      "scene": "selva_oscura",
+      "music": "o_frondens"
+    },
+    {
+      "versi": "Ahi quanto a dir qual era è cosa dura\nesta selva selvaggia e aspra e forte\nche nel pensier rinova la paura!",
+      "moderno": "È difficile perfino descrivere quanto quel bosco fosse terribile: ricordarlo fa tornare la paura.",
+      "nota": "Dante ci fa capire che quell'esperienza continua a scuoterlo anche mentre la racconta.",
+      "scene": "selva_oscura",
+      "music": "o_frondens"
+    },
+    {
+      "versi": "Tant’è amara che poco è più morte;\nma per trattar del ben ch’i’ vi trovai,\ndirò de l’altre cose ch’i’ v’ho scorte.",
+      "moderno": "Fu un'esperienza quasi peggiore della morte; ma racconterò il bene che vi trovai e ciò che vidi.",
+      "nota": "La promessa è già qui: dentro lo smarrimento Dante troverà qualcosa capace di salvarlo.",
+      "scene": "selva_oscura",
+      "music": "o_frondens"
+    },
+    {
+      "versi": "Io non so ben ridir com’i’ v’intrai,\ntant’era pien di sonno a quel punto\nche la verace via abbandonai.",
+      "moderno": "Non so spiegare come ci entrai: ero come addormentato quando abbandonai la via vera.",
+      "nota": "Il sonno indica inconsapevolezza: Dante si accorge dello smarrimento quando è già dentro la selva.",
+      "scene": "smarrimento",
+      "music": "dies_irae"
+    }
   ]
 }
