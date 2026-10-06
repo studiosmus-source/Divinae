@@ -1,7 +1,7 @@
 package com.studiosmus.divinae
 import android.media.MediaPlayer
 import android.os.Bundle
-import androidx.activity.BackHandler
+import androidx.activity.compose.BackHandler
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
