@@ -20,6 +20,10 @@ jobs:
           mkdir -p app/src/main/res/raw
           curl -L --fail --retry 3 "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bones_breaking_wood_fire_ice_crackling.ogg" -o app/src/main/res/raw/fireplace.ogg
           test -s app/src/main/res/raw/fireplace.ogg
+          curl -L --fail --retry 3 "https://commons.wikimedia.org/wiki/Special:Redirect/file/O_frondens_2.ogg" -o app/src/main/res/raw/music_selva.ogg
+          curl -L --fail --retry 3 "https://commons.wikimedia.org/wiki/Special:Redirect/file/Dies.irae.ogg" -o app/src/main/res/raw/music_smarrimento.ogg
+          test -s app/src/main/res/raw/music_selva.ogg
+          test -s app/src/main/res/raw/music_smarrimento.ogg
       - name: Build APK
         shell: bash
         run: |
