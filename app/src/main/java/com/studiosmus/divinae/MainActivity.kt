@@ -6,8 +6,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -17,8 +24,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -29,7 +34,6 @@ import androidx.compose.ui.unit.*
 import androidx.lifecycle.*
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 private val Ink=Color(0xFF2B190F);private val Red=Color(0xFF7D1F18);private val Gold=Color(0xFFC59A45)
 private val Book=FontFamily(Font(R.font.im_fell_english));private val Modern=FontFamily(Font(R.font.eb_garamond))
@@ -42,7 +46,6 @@ class MainActivity:ComponentActivity(){override fun onCreate(b:Bundle?){super.on
  var fireOn by rememberSaveable{mutableStateOf(false)};var fireStatus by rememberSaveable{mutableStateOf("PRONTO")};var fireVolume by rememberSaveable{mutableFloatStateOf(.55f)}
  var musicOn by rememberSaveable{mutableStateOf(true)};var musicVolume by rememberSaveable{mutableFloatStateOf(.42f)};var musicStatus by rememberSaveable{mutableStateOf("PRONTO")}
  var musicPlayer by remember{mutableStateOf<MediaPlayer?>(null)};var activeMusic by remember{mutableStateOf("")}
- val flip=remember{Animatable(0f)};var flipDir by remember{mutableIntStateOf(1)};val scope=rememberCoroutineScope()
  val fireId=remember{context.resources.getIdentifier("fireplace","raw",context.packageName)}
  var firePlayer by remember{mutableStateOf<MediaPlayer?>(null)}
  LaunchedEffect(fireId){if(fireId!=0&&firePlayer==null){firePlayer=runCatching{MediaPlayer.create(context,fireId)}.getOrNull();firePlayer?.isLooping=true;fireStatus=if(firePlayer==null)"ERRORE AUDIO" else "PRONTO"}}
@@ -71,15 +74,23 @@ class MainActivity:ComponentActivity(){override fun onCreate(b:Bundle?){super.on
   }
   val pageMod=if(page==0) Modifier.fillMaxWidth(.72f).fillMaxHeight(.68f).align(Alignment.TopEnd).statusBarsPadding().padding(top=46.dp,end=34.dp)
               else Modifier.fillMaxWidth(.78f).fillMaxHeight(.70f).align(Alignment.TopCenter).statusBarsPadding().padding(top=42.dp)
-  Box(pageMod.graphicsLayer{rotationY=flip.value;cameraDistance=18f*density;transformOrigin=if(flipDir>0)TransformOrigin(1f,.5f) else TransformOrigin(0f,.5f)}.padding(horizontal=10.dp,vertical=8.dp)){
+  AnimatedContent(targetState=page,modifier=pageMod,transitionSpec={
+   val forward=targetState>initialState
+   ContentTransform(
+    targetContentEnter=slideInHorizontally(tween(320,easing=FastOutSlowInEasing)){if(forward)it/3 else -it/3}+fadeIn(tween(220)),
+    initialContentExit=slideOutHorizontally(tween(320,easing=FastOutSlowInEasing)){if(forward)-it/3 else it/3}+fadeOut(tween(180))
+   )
+  },label="manuscriptPage"){shownPage->
+  val shownStart=shownPage*perPage;val shownEnd=(shownStart+perPage).coerceAtMost(canto.terzine.size)
+  Box(Modifier.fillMaxSize().padding(horizontal=10.dp,vertical=8.dp)){
    Column(Modifier.fillMaxSize(),horizontalAlignment=Alignment.CenterHorizontally){
     Text(canto.cantica.uppercase(),fontFamily=Book,fontSize=13.sp,letterSpacing=3.sp,color=Red);Text("CANTO "+roman(canto.numero),fontFamily=Book,fontWeight=FontWeight.Bold,fontSize=22.sp,color=Ink)
     Box(Modifier.padding(vertical=6.dp).width(84.dp).height(1.dp).background(Gold))
-    Column(Modifier.weight(1f).fillMaxWidth()){(start until end).forEach{i->val t=canto.terzine[i];Column(Modifier.fillMaxWidth().clickable{selected=i}.padding(vertical=6.dp)){Text((i*3+1).toString(),fontFamily=Book,fontSize=11.sp,color=Red);Text(t.versi,fontFamily=Book,fontSize=15.sp,lineHeight=20.sp,color=Ink)}}}
+    Column(Modifier.weight(1f).fillMaxWidth()){(shownStart until shownEnd).forEach{i->val t=canto.terzine[i];Column(Modifier.fillMaxWidth().clickable{selected=i}.padding(vertical=6.dp)){Text((i*3+1).toString(),fontFamily=Book,fontSize=11.sp,color=Red);Text(t.versi,fontFamily=Book,fontSize=15.sp,lineHeight=20.sp,color=Ink)}}}
     Text("Tocca una terzina per comprenderla",fontFamily=Book,fontSize=11.sp,color=Ink.copy(.62f))
-    Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically){Text("‹",Modifier.clickable(enabled=page>0&&flip.value==0f){scope.launch{flipDir=-1;flip.animateTo(-88f,tween(180));page--;selected=null;flip.snapTo(88f);flip.animateTo(0f,tween(220))}}.padding(12.dp),fontSize=30.sp,color=if(page>0)Red else Ink.copy(.2f));Text((page+1).toString()+" / "+pageCount,fontFamily=Book,fontSize=13.sp,color=Ink);Text("›",Modifier.clickable(enabled=page<pageCount-1&&flip.value==0f){scope.launch{flipDir=1;flip.animateTo(88f,tween(180));page++;selected=null;flip.snapTo(-88f);flip.animateTo(0f,tween(220))}}.padding(12.dp),fontSize=30.sp,color=if(page<pageCount-1)Red else Ink.copy(.2f))}
+    Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically){Text("‹",Modifier.clickable(enabled=page>0){page--;selected=null}.padding(12.dp),fontSize=30.sp,color=if(page>0)Red else Ink.copy(.2f));Text((page+1).toString()+" / "+pageCount,fontFamily=Book,fontSize=13.sp,color=Ink);Text("›",Modifier.clickable(enabled=page<pageCount-1){page++;selected=null}.padding(12.dp),fontSize=30.sp,color=if(page<pageCount-1)Red else Ink.copy(.2f))}
    }
-  }
+  }}
   Box(Modifier.align(Alignment.CenterEnd)){if(!tabs&&drawer==null)Text("‹",Modifier.background(Color(0xDD4A2417)).clickable{tabs=true}.padding(8.dp,18.dp),color=Gold,fontSize=20.sp);if(tabs&&drawer==null)Column{listOf("♫" to "Musica","🔥" to "Atmosfera","☰" to "Indice").forEach{p->Text(p.first,Modifier.padding(4.dp).background(Color(0xEE4A2417)).clickable{drawer=p.second;tabs=false}.padding(12.dp),fontSize=20.sp,color=Gold)}}}
   AnimatedVisibility(drawer!=null,Modifier.align(Alignment.CenterEnd)){Column(Modifier.width(230.dp).background(Color(0xFFF3E8CF)).padding(16.dp)){Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween){Text(drawer?:"",fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=19.sp,color=Red);Text("×",Modifier.clickable{drawer=null}.padding(8.dp),fontSize=24.sp,color=Ink)}
    when(drawer){"Atmosfera"->{Text("Camino",fontFamily=Modern,fontSize=16.sp,color=Ink);Text(if(fireId==0)"AUDIO NON INSTALLATO" else fireStatus,fontFamily=Modern,fontSize=11.sp,color=Ink.copy(.65f));Text(if(fireOn)"🔥 Spegni" else "🔥 Accendi",Modifier.fillMaxWidth().clickable{val p=firePlayer;if(p==null)fireStatus="AUDIO NON INSTALLATO" else if(fireOn){runCatching{p.pause()};fireOn=false;fireStatus="PRONTO"}else{val ok=runCatching{p.setVolume(fireVolume,fireVolume);p.start();p.isPlaying}.getOrDefault(false);fireOn=ok;fireStatus=if(ok)"IN RIPRODUZIONE" else "ERRORE RIPRODUZIONE"}}.padding(vertical=14.dp),fontFamily=Modern,fontWeight=FontWeight.Bold,fontSize=16.sp,color=Red);Slider(fireVolume,{fireVolume=it;firePlayer?.setVolume(it,it)},colors=SliderDefaults.colors(thumbColor=Red,activeTrackColor=Gold))}
